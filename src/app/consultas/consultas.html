@@ -1,0 +1,86 @@
+
+<div class="container">
+  <h1>Clínica Médica</h1>
+  <h2>Cadastrar consulta</h2>
+
+  <form [formGroup]="formulario" (ngSubmit)="cadastrar()">
+
+    <label for="nomePaciente">Nome do paciente:</label>
+    <input
+      id="nomePaciente"
+      type="text"
+      formControlName="nomePaciente"
+      placeholder="Digite o nome do paciente"
+    />
+
+    @if (
+      formulario.get('nomePaciente')?.touched &&
+      formulario.get('nomePaciente')?.invalid
+    ) {
+      <p class="erro">Informe o nome do paciente.</p>
+    }
+
+    <label for="preco">Preço da consulta (R$):</label>
+    <input
+      id="preco"
+      type="number"
+      formControlName="preco"
+      min="0.01"
+      step="0.01"
+    />
+
+    @if (
+      formulario.get('preco')?.touched &&
+      formulario.get('preco')?.invalid
+    ) {
+      <p class="erro">Informe um preço maior que zero.</p>
+    }
+
+    <label for="data">Data da consulta:</label>
+    <input
+      id="data"
+      type="date"
+      formControlName="data"
+    />
+
+    @if (
+      formulario.get('data')?.touched &&
+      formulario.get('data')?.invalid
+    ) {
+      <p class="erro">Informe a data da consulta.</p>
+    }
+
+    <button type="submit">Cadastrar consulta</button>
+  </form>
+
+  <h2>Consultas cadastradas</h2>
+
+  @if (consultas.length > 0) {
+    <table>
+      <thead>
+        <tr>
+          <th>Paciente</th>
+          <th>Preço</th>
+          <th>Data</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        @for (consulta of consultas; track $index) {
+          <tr>
+            <td>{{ consulta.nomePaciente }}</td>
+            <td>{{ consulta.preco | currency:'BRL':'symbol':'1.2-2' }}</td>
+            <td>{{ consulta.data | date:'dd/MM/yyyy':'UTC' }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  } @else {
+    <p>Nenhuma consulta cadastrada.</p>
+  }
+
+  <h2>
+    Total arrecadado:
+    {{ total | currency:'BRL':'symbol':'1.2-2' }}
+  </h2>
+</div>
